@@ -30,9 +30,9 @@ void selection_sotr(int* arr,size_t n){
     {
         min_idx = i;
         for (int j = i+1; j < n; j++)
-        if (arr[j] < arr[min_idx])
+        if (arr[j] < arr[min_idx]){
             min_idx = j;
- 
+        }
         std::swap(arr[min_idx], arr[i]);
     }    
 }
@@ -52,6 +52,80 @@ void insertion_sort(int* arr, size_t n){
     }
 }
 
+void merge(int arr[], int l, int m, int r){
+    int n1 = m - l + 1;
+    int n2 = r - m;
+ 
+    int L[n1], R[n2];
+ 
+    
+    for (int i = 0; i < n1; i++){ L[i] = arr[l + i];}
+    for (int j = 0; j < n2; j++){ R[j] = arr[m + 1 + j];}
+    
+    int i = 0;
+
+    int j = 0;
+ 
+    int k = l;
+ 
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        }
+        else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+ 
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+void merge_sort(int* arr,size_t l,size_t r){
+if(l>=r){
+        return;
+    }
+    int m =l+ (r-l)/2;
+    merge_sort(arr,l,m);
+    merge_sort(arr,m+1,r);
+    merge(arr,l,m,r);
+}
+
+int partation(int* arr,size_t l,size_t r){
+    int base = arr[r];
+    int i = l-1;
+
+    for (size_t j = 0; j <= r-1 ; i++)
+    {
+        if(arr[j] < base){
+            ++i;
+            std::swap(arr[i],arr[j]);   
+        }
+    }
+    std::swap(arr[i+1],arr[r]);
+    return i+1;
+}
+
+void quick_sort(int* arr,size_t l,size_t r){
+    if(l<r){
+        int b = partation(arr,l,r);
+
+        quick_sort(arr,l,b-1);
+        quick_sort(arr,l+b,r);
+    }
+}
 
 int main(){
    size_t n;
@@ -75,6 +149,18 @@ int main(){
 
    //Isertion Sort
    insertion_sort(arr,n);
+   std::cout << std::endl;
+   display(arr,n);
+   std::cout << std::endl;
+
+   //Merge Sort
+   merge_sort(arr,0,n);
+   std::cout << std::endl;
+   display(arr,n);
+   std::cout << std::endl;
+
+   //Quick Sort
+   quick_sort(arr,0,n-1);
    std::cout << std::endl;
    display(arr,n);
    std::cout << std::endl;
